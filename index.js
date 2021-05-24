@@ -1,27 +1,19 @@
 const http = require('http');
 const { setRouter, useRouter } = require('./routers');
-const port = 3030;
+const controllers = require('./controllers/index');
+const port = 5000;
 
-const home = (req, res) => {
-    res.writeHead(200, 'Content-Type', 'text/html');
-    res.write('<h1>Home Page</h1>');
-    res.write('<a href="/cats">Cats page</a>');
-    res.end();
-};
+setRouter('get', '/', controllers.home);
+setRouter('get', '/cats', controllers.cats);
+setRouter('get', '/public', controllers.public);
 
-const cats = (req, res) => {
-    res.writeHead(200, 'Content-Type', 'text/html');
-    res.write('<h1>Cats Page</h1>');
-    res.write('<a href="/">Home page</a>');
-    res.end();
-};
+const server = http.createServer((req, res) => {
+    const method = req.method.toLowerCase();
+    const path = req.url.toLowerCase();
+    useRouter(method, path)(req, res);
+});
 
-setRouter('get', '/', home);
-setRouter('get', '/cats', cats);
-
-const server = http.createServer(useRouter);
-
-server.listen(port, () => console.log(`Server started at port: ${port}`));
+server.listen(port, () => console.log.bind(console, `Server start listening at port: ${port}...`));
 
 // server.once('listening', () => console.log('>>> Server Listening Event <<<'));
 

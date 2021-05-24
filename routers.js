@@ -7,21 +7,23 @@ const routes = {
 
 const setRouter = (method, path, controller) => {
     routes[method.toLowerCase()][path] = controller;
-    console.log(routes);
-}
+    // console.log(routes);
+};
 
-const useRouter = (req, res) => {
-    const method = req.method.toLowerCase();
-    const path = req.url.toLowerCase();
+const notFound = (req, res) => {
+    res.writeHead(404, 'Content-Type', 'text/html');
+    res.write('<h1>Page not found</h1>');
+    res.write('<a href="/">return to home</a>');
+    res.end();
+};
 
+const useRouter = (method, path = '') => {
     if (typeof routes[method][path] === 'function') {
-        routes[method.toLowerCase()][path](req, res);
-        return;
+        return routes[method][path];
+    } else if (path.startsWith('/public')) {
+        return routes[method]['/public'];
     } else {
-        res.writeHead(404, 'Content-Type', 'text/html');
-        res.write('<h1>Page not found</h1>');
-        res.write('<a href="/">return to home</a>');
-        res.end();
+        return notFound;
     }
 };
 
