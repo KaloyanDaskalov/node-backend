@@ -4,7 +4,11 @@ const controllers = require('./controllers/index');
 const port = 5000;
 
 setRouter('get', '/', controllers.home);
-setRouter('get', '/cats', controllers.cats);
+setRouter('get', '/add-cat', controllers.cats);
+setRouter('get', '/add-breed', controllers.breed);
+setRouter('get', '/edit', controllers.edit);
+setRouter('get', '/cat-shelter', controllers.shelter);
+setRouter('post', '/upload', controllers.upload);
 setRouter('get', '/public', controllers.public);
 
 const server = http.createServer((req, res) => {

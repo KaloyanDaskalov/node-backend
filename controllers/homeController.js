@@ -1,12 +1,13 @@
 const fs = require('fs/promises');
 
-module.exports = (req, res) => {
-	fs.readFile('./views/home/index.html')
-		.then(data => {
-			res.writeHead(200, 'Content-Type', 'text/html');
-			res.write(data);
-			res.end();
-		})
-		.catch(console.log);
-	// res.write('<a href="/cats">Cats page</a>');
+module.exports = async (req, res) => {
+
+	try {
+		const data = await fs.readFile('./views/home/index.html');
+		res.writeHead(200, 'Content-Type', 'text/html');
+		res.write(data.toString().replace(/Kitty/g, 'Bunny'));
+		res.end();
+	} catch (err) {
+		console.log(err);
+	}
 };
